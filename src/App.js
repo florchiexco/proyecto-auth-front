@@ -19,6 +19,7 @@ export default class App extends React.Component {
     };
   }
 
+  //Ejecuta el método de login del userService y luego almacena en el localstorage el token del usuario
   login = async user => {
     userService.loginService(user).then(acept => {
       if (acept) {
