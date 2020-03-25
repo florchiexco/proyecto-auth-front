@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+//Componentes programados
+import userService from "./services/userService";
+import Login from "./components/Login.js";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      user: {
+        login: false
+      }
+    };
+  }
+
+  //Ejecuta el método de login del userService y luego almacena en el localstorage el token del usuario
+  login = async user => {
+    userService.loginService(user).then(acept => {
+      if (acept) {
+        let loginUser = {
+          login: true,
+          id: acept.user.id,
+          mail: acept.user.mail
+        };
+        this.setState({
+          user: loginUser
+        });
+        localStorage.setItem("token", acept.access_token);
+      }
+    });
+  };
+
+
+  render(){
+    return (
+      <>
+      <Router>
+         <Route exact path="/login">
+          <Login login={this.login} />
+          </Route>
+          </Router>
+      </>
+    )
+  }
+
 }
-
-export default App;
