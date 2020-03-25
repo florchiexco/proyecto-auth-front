@@ -2,6 +2,7 @@ import React from "react";
 //Componentes programados
 import userService from "./services/userService";
 import Login from "./components/Login.js";
+import UserNav from "./components/UserNav.js";
 import {
   BrowserRouter as Router,
   Switch,
@@ -36,12 +37,24 @@ export default class App extends React.Component {
     });
   };
 
+  logout = () => {
+    userService.logoutService();
+    localStorage.removeItem("token");
+    let logoutUser = {
+      login: false
+    };
+    this.setState({
+      user: logoutUser
+    });
+  };
+
 
   render(){
     return (
       <>
       <Router>
          <Route exact path="/login">
+          <UserNav logout={this.logout}/>
           <Login login={this.login} />
           </Route>
           </Router>
